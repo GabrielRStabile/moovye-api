@@ -1,21 +1,31 @@
+using DotNetEnv;
+using Movye.Api.IoC;
+
+Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.RegisterServices(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors();
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
+app.UseCors(builder => builder
+    .SetIsOriginAllowed(orign => true)
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowCredentials());
 app.MapControllers();
 
 app.Run();
