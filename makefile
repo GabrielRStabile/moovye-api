@@ -5,3 +5,6 @@ ef-migrations-identity:
 
 ef-update-identity:
 	cd src/Movye.Identity && dotnet ef database update -s ../Movye.Api --context IdentityDataContext
+
+start-dev:
+	cd src/Movye.Api && dotnet watch run
