@@ -1,11 +1,15 @@
 using DotNetEnv;
 using Movye.Api.IoC;
+using Movye.Api.Extensions;
 
 Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.RegisterServices(builder.Configuration);
+builder.Services.AddAuthentication(builder.Configuration);
 builder.Services.AddControllers();
+builder.Services.AddApiProblemDetails();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
@@ -26,6 +30,7 @@ app.UseCors(builder => builder
     .AllowAnyMethod()
     .AllowAnyHeader()
     .AllowCredentials());
+
 app.MapControllers();
 
 app.Run();
