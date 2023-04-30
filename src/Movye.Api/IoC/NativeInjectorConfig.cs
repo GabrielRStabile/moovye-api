@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Movye.Data.Context;
 using Movye.Domain.Entities;
+using Movye.Domain.Interfaces.Services.IIdentityService;
+using Movye.Domain.Interfaces.Services.IJwtService;
 using Movye.Identity.Data;
 using Movye.Identity.Providers.PasswordlessLoginTokenProvider;
+using Movye.Identity.Services;
 
 namespace Movye.Api.IoC
 {
@@ -25,6 +28,15 @@ namespace Movye.Api.IoC
                 .AddEntityFrameworkStores<IdentityDataContext>()
                 .AddDefaultTokenProviders()
                 .AddPasswordlessLoginTotpTokenProvider();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.User.AllowedUserNameCharacters =
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+ ";
+            });
+
+            services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IJwtService, JwtService>();
         }
     }
 }
