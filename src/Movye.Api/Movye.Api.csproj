@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="../Movye.Data/Movye.Data.csproj" />
     <ProjectReference Include="../Movye.Identity/Movye.Identity.csproj" />
+    <ProjectReference Include="../Movye.Application/Movye.Application.csproj" />
   </ItemGroup>
 
 
