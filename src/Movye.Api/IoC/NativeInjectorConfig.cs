@@ -1,10 +1,12 @@
 using DotNetEnv;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Movye.Application.Services;
 using Movye.Data.Context;
 using Movye.Domain.Entities;
 using Movye.Domain.Interfaces.Services.IIdentityService;
 using Movye.Domain.Interfaces.Services.IJwtService;
+using Movye.Domain.Interfaces.Services.IMailService;
 using Movye.Identity.Data;
 using Movye.Identity.Providers.PasswordlessLoginTokenProvider;
 using Movye.Identity.Services;
@@ -37,6 +39,7 @@ namespace Movye.Api.IoC
 
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IJwtService, JwtService>();
+            services.AddTransient<IMailService, MailService>();
         }
     }
 }
