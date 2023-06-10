@@ -5,17 +5,15 @@ using Movye.Domain.Interfaces.Repositories.Shared;
 
 namespace Movye.Data.Repositories.Shared
 {
-    public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : Entity
+    public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
+        where TEntity : Entity
     {
         protected readonly DataContext Context;
 
-        public RepositoryBase(DataContext dataContext) =>
-            Context = dataContext;
+        protected RepositoryBase(DataContext dataContext) => Context = dataContext;
 
         public virtual async Task<IEnumerable<TEntity>> GetAll() =>
-            await Context.Set<TEntity>()
-                .AsNoTracking()
-                .ToListAsync();
+            await Context.Set<TEntity>().AsNoTracking().ToListAsync();
 
         public virtual async Task<TEntity?> GetById(int id) =>
             await Context.Set<TEntity>().FindAsync(id);
@@ -41,13 +39,15 @@ namespace Movye.Data.Repositories.Shared
 
         public virtual async Task RemoveById(int id)
         {
-            var entity = await GetById(id);
-            if (entity == null)
-                throw new Exception("O registro não existe na base de dados.");
+            var entity =
+                await GetById(id) ?? throw new Exception("O registro não existe na base de dados.");
             await Remove(entity);
         }
 
-        public void Dispose() =>
+        public void Dispose()
+        {
             Context.Dispose();
+            GC.SuppressFinalize(this);
+        }
     }
 }

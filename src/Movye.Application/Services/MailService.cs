@@ -10,17 +10,22 @@ namespace Movye.Application.Services
     {
         public Task SendEmail(MailServiceSendEmailRequest request)
         {
-            var client = new SmtpClient(Env.GetString("STMP_HOST"), Env.GetInt("STMP_PORT"))
+            var client = new SmtpClient(Env.GetString("SMTP_HOST"), Env.GetInt("SMTP_PORT"))
             {
                 EnableSsl = true,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(Env.GetString("SMTP_SENDER_EMAIL"), Env.GetString("SMTP_SENDER_PASSWORD"))
+                Credentials = new NetworkCredential(
+                    Env.GetString("SMTP_SENDER_EMAIL"),
+                    Env.GetString("SMTP_SENDER_PASSWORD")
+                )
             };
 
             return client.SendMailAsync(
                 new MailMessage(
                     from: $"{request.Sender.GetName()} <{Env.GetString("SMTP_SENDER_EMAIL")}>",
-                    to: request.Email, request.Subject, request.Message
+                    to: request.Email,
+                    request.Subject,
+                    request.Message
                 )
             );
         }

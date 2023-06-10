@@ -4,11 +4,15 @@ namespace Movye.Identity.Configurations
 {
     public class JwtOptions
     {
-        public JwtOptions()
-        {
-        }
+        public JwtOptions() { }
 
-        public JwtOptions(string issuer, string audience, SigningCredentials signingCredentials, int accessTokenExpiration, int refreshTokenExpiration)
+        public JwtOptions(
+            string issuer,
+            string audience,
+            SigningCredentials signingCredentials,
+            int accessTokenExpiration,
+            int refreshTokenExpiration
+        )
         {
             Issuer = issuer;
             Audience = audience;

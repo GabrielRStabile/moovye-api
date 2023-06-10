@@ -10,6 +10,5 @@ namespace Movye.Domain.Entities
         }
 
         public string Name { get; protected set; }
-
     }
 }

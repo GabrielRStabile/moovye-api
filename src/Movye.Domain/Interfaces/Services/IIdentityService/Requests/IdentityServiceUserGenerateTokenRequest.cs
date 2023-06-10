@@ -1,5 +1,4 @@
 using Movye.Domain.Interfaces.DTOs;
-using Movye.Domain.Interfaces.DTOs.Auth.Requests;
 
 namespace Movye.Domain.Interfaces.Services.IIdentityService.Requests
 {
@@ -16,6 +15,5 @@ namespace Movye.Domain.Interfaces.Services.IIdentityService.Requests
         }
 
         public string Email { get; set; }
-
     }
 }

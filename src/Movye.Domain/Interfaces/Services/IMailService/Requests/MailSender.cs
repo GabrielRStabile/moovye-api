@@ -1,18 +1,19 @@
 namespace Movye.Domain.Interfaces.Services.IMailService.Requests
 {
+    public enum MailSender
+    {
+        AuthenticationService
+    }
 
-    public enum MailSender { AuthenticationService }
     public static class Extensions
     {
         public static string GetName(this MailSender sender)
         {
-            switch (sender)
+            return sender switch
             {
-                case MailSender.AuthenticationService:
-                    return "Autenticador Movye";
-                default:
-                    return "Movye App";
-            }
+                MailSender.AuthenticationService => "Autenticador Movye",
+                _ => "Movye App",
+            };
         }
     }
 }

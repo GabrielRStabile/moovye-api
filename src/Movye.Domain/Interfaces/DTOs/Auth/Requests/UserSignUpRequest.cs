@@ -21,6 +21,5 @@ namespace Movye.Domain.Interfaces.DTOs.Auth.Requests
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
-
     }
 }

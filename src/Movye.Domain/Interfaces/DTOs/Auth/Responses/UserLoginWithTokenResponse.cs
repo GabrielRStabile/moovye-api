@@ -11,9 +11,9 @@ namespace Movye.Domain.Interfaces.DTOs.Auth.Responses
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string AccessToken { get; private set; }
+        public string AccessToken { get; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string RefreshToken { get; private set; }
+        public string RefreshToken { get; }
     }
 }

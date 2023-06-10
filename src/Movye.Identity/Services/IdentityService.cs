@@ -8,16 +8,16 @@ namespace Movye.Identity.Services
 {
     public class IdentityService : IIdentityService
     {
-        private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
 
-        public IdentityService(SignInManager<User> signInManager, UserManager<User> userManager)
+        public IdentityService(UserManager<User> userManager)
         {
-            _signInManager = signInManager;
             _userManager = userManager;
         }
 
-        async Task<IdentityServiceUserSignUpResponse> IIdentityService.SignUpUser(IdentityServiceUserSignUpRequest request)
+        async Task<IdentityServiceUserSignUpResponse> IIdentityService.SignUpUser(
+            IdentityServiceUserSignUpRequest request
+        )
         {
             var user = new User
             {
@@ -34,37 +34,60 @@ namespace Movye.Identity.Services
 
             var response = new IdentityServiceUserSignUpResponse(result.Succeeded);
 
-            if (!result.Succeeded && result.Errors.Count() > 0)
+            if (!result.Succeeded && result.Errors.Any())
                 response.AddError(result.Errors.Select(r => r.Description));
 
             return response;
         }
 
-        async Task<IdentityServiceUserGenerateTokenResponse> IIdentityService.GenerateToken(IdentityServiceUserGenerateTokenRequest request)
+        async Task<IdentityServiceUserGenerateTokenResponse> IIdentityService.GenerateToken(
+            IdentityServiceUserGenerateTokenRequest request
+        )
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
 
             if (user == null)
-                return new IdentityServiceUserGenerateTokenResponse(new List<string> { "User not found" });
+            {
+                return new IdentityServiceUserGenerateTokenResponse(
+                    new List<string> { "User not found" }
+                );
+            }
 
             var token = await _userManager.GenerateUserTokenAsync(
-                user, "PasswordlessLoginTotpProvider", "passwordless-auth");
+                user,
+                "PasswordlessLoginTotpProvider",
+                "passwordless-auth"
+            );
 
             return new IdentityServiceUserGenerateTokenResponse(token);
         }
 
-        async Task<IdentityServiceUserValidateTokenResponse> IIdentityService.ValidateToken(IdentityServiceUserValidateTokenRequest request)
+        async Task<IdentityServiceUserValidateTokenResponse> IIdentityService.ValidateToken(
+            IdentityServiceUserValidateTokenRequest request
+        )
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
 
             if (user == null)
-                return new IdentityServiceUserValidateTokenResponse(new List<string> { "User not found" });
+            {
+                return new IdentityServiceUserValidateTokenResponse(
+                    new List<string> { "User not found" }
+                );
+            }
 
-            var isValid = await _userManager.VerifyUserTokenAsync(user, "PasswordlessLoginTotpProvider", "passwordless-auth", request.Token);
+            var isValid = await _userManager.VerifyUserTokenAsync(
+                user,
+                "PasswordlessLoginTotpProvider",
+                "passwordless-auth",
+                request.Token
+            );
 
             if (!isValid)
-                return new IdentityServiceUserValidateTokenResponse(new List<string> { "Invalid token" });
-
+            {
+                return new IdentityServiceUserValidateTokenResponse(
+                    new List<string> { "Invalid token" }
+                );
+            }
 
             return new IdentityServiceUserValidateTokenResponse(isValid);
         }

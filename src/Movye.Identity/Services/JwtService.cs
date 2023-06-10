@@ -25,7 +25,9 @@ namespace Movye.Identity.Services
             var tokenClaims = await GetClaims(user);
 
             var accessTokenExpiration = DateTime.Now.AddSeconds(_jwtOptions.AccessTokenExpiration);
-            var refreshTokenExpiration = DateTime.Now.AddSeconds(_jwtOptions.RefreshTokenExpiration);
+            var refreshTokenExpiration = DateTime.Now.AddSeconds(
+                _jwtOptions.RefreshTokenExpiration
+            );
 
             var accessToken = GenerateToken(tokenClaims, accessTokenExpiration);
             var refreshToken = GenerateToken(tokenClaims, refreshTokenExpiration);
@@ -35,13 +37,14 @@ namespace Movye.Identity.Services
 
         async public Task<IList<Claim>> GetClaims(User user)
         {
-            var claims = new List<Claim>();
-
-            claims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Id));
-            claims.Add(new Claim(JwtRegisteredClaimNames.Email, user.Email!));
-            claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
-            claims.Add(new Claim(JwtRegisteredClaimNames.Nbf, DateTime.Now.ToString()));
-            claims.Add(new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()));
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Nbf, DateTime.Now.ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString())
+            };
 
             var userClaims = await _userManager.GetClaimsAsync(user);
             var roles = await _userManager.GetRolesAsync(user);

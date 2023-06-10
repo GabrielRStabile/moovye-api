@@ -14,6 +14,5 @@ namespace Movye.Domain.Interfaces.DTOs
         [EmailAddress(ErrorMessage = "O campo {0} está em um formato inválido")]
         [FromQuery(Name = "email")]
         public string Email { get; set; }
-
     }
 }

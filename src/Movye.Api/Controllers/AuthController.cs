@@ -16,14 +16,18 @@ namespace Movye.Api.Controllers
 {
     public class AuthController : ApiControllerBase
     {
-        private IIdentityService _identityService;
-        private IJwtService _jwtService;
-        private UserManager<User> _userManager;
-        private IMailService _mailService;
-
+        private readonly IIdentityService _identityService;
+        private readonly IJwtService _jwtService;
+        private readonly UserManager<User> _userManager;
+        private readonly IMailService _mailService;
 
         [ActivatorUtilitiesConstructor]
-        public AuthController(IIdentityService identityService, IJwtService jwtService, UserManager<User> userManager, IMailService mailService)
+        public AuthController(
+            IIdentityService identityService,
+            IJwtService jwtService,
+            UserManager<User> userManager,
+            IMailService mailService
+        )
         {
             _identityService = identityService;
             _jwtService = jwtService;
@@ -37,7 +41,9 @@ namespace Movye.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            IdentityServiceUserSignUpResponse response = await _identityService.SignUpUser(new IdentityServiceUserSignUpRequest(request));
+            IdentityServiceUserSignUpResponse response = await _identityService.SignUpUser(
+                new IdentityServiceUserSignUpRequest(request)
+            );
 
             if (!response.Success)
                 return BadRequest(response);
@@ -46,32 +52,43 @@ namespace Movye.Api.Controllers
         }
 
         [HttpPost("token")]
-        public async Task<ActionResult<UserSendTokenResponse>> GenerateToken(UserSendTokenRequest request)
+        public async Task<ActionResult<UserSendTokenResponse>> GenerateToken(
+            UserSendTokenRequest request
+        )
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var response = await _identityService.GenerateToken(new IdentityServiceUserGenerateTokenRequest(request));
+            var response = await _identityService.GenerateToken(
+                new IdentityServiceUserGenerateTokenRequest(request)
+            );
 
             if (!response.Success)
                 return BadRequest(response);
 
             await _mailService.SendEmail(
                 new MailServiceSendEmailRequest(
-                    request.Email, "Acesso ao Movye App", $"Seu token de acesso é: {response.Token}", MailSender.AuthenticationService
+                    request.Email,
+                    "Acesso ao Movye App",
+                    $"Seu token de acesso é: {response.Token}",
+                    MailSender.AuthenticationService
                 )
             );
 
-            return Ok(response);
+            return Ok();
         }
 
         [HttpPost("signin")]
-        public async Task<ActionResult<UserLoginWithTokenResponse>> ValidateToken([FromBody] UserLoginWithTokenRequest request)
+        public async Task<ActionResult<UserLoginWithTokenResponse>> ValidateToken(
+            [FromBody] UserLoginWithTokenRequest request
+        )
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var response = await _identityService.ValidateToken(new IdentityServiceUserValidateTokenRequest(request));
+            var response = await _identityService.ValidateToken(
+                new IdentityServiceUserValidateTokenRequest(request)
+            );
 
             if (!response.Success)
                 return BadRequest(response);

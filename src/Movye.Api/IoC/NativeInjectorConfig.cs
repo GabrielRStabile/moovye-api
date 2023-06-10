@@ -15,17 +15,18 @@ namespace Movye.Api.IoC
 {
     public static class NativeInjectorConfig
     {
-        public static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
+        public static void RegisterServices(this IServiceCollection services, IConfiguration _)
         {
-            services.AddDbContext<DataContext>(options =>
-                options.UseNpgsql(Env.GetString("POSTGRE_DB_CONNECTION_STRING"))
+            services.AddDbContext<DataContext>(
+                options => options.UseNpgsql(Env.GetString("POSTGRE_DB_CONNECTION_STRING"))
             );
 
-            services.AddDbContext<IdentityDataContext>(options =>
-                options.UseNpgsql(Env.GetString("POSTGRE_DB_CONNECTION_STRING"))
+            services.AddDbContext<IdentityDataContext>(
+                options => options.UseNpgsql(Env.GetString("POSTGRE_DB_CONNECTION_STRING"))
             );
 
-            services.AddDefaultIdentity<User>()
+            services
+                .AddDefaultIdentity<User>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<IdentityDataContext>()
                 .AddDefaultTokenProviders()
