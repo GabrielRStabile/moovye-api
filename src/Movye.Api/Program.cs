@@ -1,13 +1,15 @@
-using DotNetEnv;
 using Movye.Api.IoC;
 using Movye.Api.Extensions;
-
-Env.Load();
+using Movye.Api.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
+IConfiguration config = builder.Configuration;
+builder.Services.Configure<AppEnvironments>(config.GetSection("AppEnviroment"));
+
 builder.Services.RegisterServices(builder.Configuration);
-builder.Services.AddAuthentication(builder.Configuration);
+builder.Services.AddAuthentication(config);
+
 builder.Services.AddControllers();
 builder.Services.AddApiProblemDetails();
 builder.Services.AddEndpointsApiExplorer();

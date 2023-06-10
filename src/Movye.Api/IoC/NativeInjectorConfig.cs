@@ -1,6 +1,7 @@
-using DotNetEnv;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Movye.Api.Utils;
 using Movye.Application.Services;
 using Movye.Data.Context;
 using Movye.Domain.Entities;
@@ -17,12 +18,15 @@ namespace Movye.Api.IoC
     {
         public static void RegisterServices(this IServiceCollection services, IConfiguration _)
         {
+            var serviceProvider = services.BuildServiceProvider();
+            var env = serviceProvider.GetRequiredService<IOptions<AppEnvironments>>();
+
             services.AddDbContext<DataContext>(
-                options => options.UseNpgsql(Env.GetString("POSTGRE_DB_CONNECTION_STRING"))
+                options => options.UseNpgsql(env.Value.POSTGRE_DB_CONNECTION_STRING)
             );
 
             services.AddDbContext<IdentityDataContext>(
-                options => options.UseNpgsql(Env.GetString("POSTGRE_DB_CONNECTION_STRING"))
+                options => options.UseNpgsql(env.Value.POSTGRE_DB_CONNECTION_STRING)
             );
 
             services
