@@ -11,8 +11,9 @@ builder.Services.AddAuthentication(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddApiProblemDetails();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
+builder.Services.AddVersioning();
+builder.Services.AddSwagger();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 var app = builder.Build();
@@ -22,8 +23,9 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseRouting();
+app.UseAuthorization();
 
 app.UseCors(
     builder =>

@@ -8,5 +8,6 @@ namespace Movye.Domain.Interfaces.Services.IJwtService
     {
         Task<JwtServiceGenerateJwtTokenResponse> GenerateJwtToken(User user);
         Task<IList<Claim>> GetClaims(User user);
+        string GetUserIdFromToken(string token);
     }
 }

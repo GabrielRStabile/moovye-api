@@ -57,6 +57,15 @@ namespace Movye.Identity.Services
             return claims;
         }
 
+        public string GetUserIdFromToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            JwtSecurityToken jwtToken = tokenHandler.ReadJwtToken(token);
+
+            return jwtToken.Subject;
+        }
+
         private string GenerateToken(IEnumerable<Claim> claims, DateTime expiration)
         {
             var jwt = new JwtSecurityToken(

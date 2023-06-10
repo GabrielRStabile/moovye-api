@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Movye.Api.Controllers.Shared;
@@ -14,6 +15,8 @@ using Movye.Domain.Interfaces.Services.IMailService.Requests;
 
 namespace Movye.Api.Controllers
 {
+    [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/[controller]")]
     public class AuthController : ApiControllerBase
     {
         private readonly IIdentityService _identityService;
@@ -98,6 +101,24 @@ namespace Movye.Api.Controllers
             var token = await _jwtService.GenerateJwtToken(user!);
 
             return Ok(token);
+        }
+
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<ActionResult<User>> GetCurrentUser()
+        {
+            var jwtToken = HttpContext.Request.Headers["Authorization"]
+                .ToString()
+                .Replace("Bearer ", "");
+
+            var userId = _jwtService.GetUserIdFromToken(jwtToken);
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+                return NotFound();
+
+            return Ok(user);
         }
     }
 }
