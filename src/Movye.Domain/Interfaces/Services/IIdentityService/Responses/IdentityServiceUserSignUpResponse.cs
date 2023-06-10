@@ -1,0 +1,18 @@
+using Movye.Domain.Interfaces.DTOs;
+
+namespace Movye.Domain.Interfaces.Services.IIdentityService.Responses
+{
+    public class IdentityServiceUserSignUpResponse : IResponse
+    {
+        public IdentityServiceUserSignUpResponse(bool success)
+        {
+            Success = success;
+        }
+
+        public IdentityServiceUserSignUpResponse(List<string> errors)
+        {
+            Success = false;
+            Errors = errors;
+        }
+    }
+}
