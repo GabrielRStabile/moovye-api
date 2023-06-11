@@ -8,9 +8,7 @@ namespace Movye.Data.Mapping
     {
         public void Configure(EntityTypeBuilder<Movie> builder)
         {
-            builder.Property(b => b.Name)
-                .IsRequired()
-                .HasMaxLength(100);
+            builder.Property(b => b.Title).IsRequired().HasMaxLength(100);
         }
     }
 }
