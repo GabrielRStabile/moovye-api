@@ -15,5 +15,6 @@ namespace Movye.Api.Utils
         public string SMTP_SENDER_EMAIL { get; set; }
         public string SMTP_SENDER_PASSWORD { get; set; }
         public string THEMOVIEDB_API_KEY { get; set; }
+        public string THEMOVIEDB_API_URL { get; set; }
     }
 }
