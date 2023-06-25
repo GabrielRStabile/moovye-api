@@ -8,5 +8,6 @@ namespace Movye.Domain.Interfaces.Services.IMovieDBService
         Task<GetMostPopularMoviesResponseModel?> GetMostPopularMovies();
         Task<GetMovieDetailsResponseModel?> GetMovieDetails(int movieId);
         Task<GetMovieVideosResponseModel?> GetMovieVideos(int movieId);
+        Task<GetMoviesByKeywordResponse?> GetMovieByKeyword(String keyword);
     }
 }

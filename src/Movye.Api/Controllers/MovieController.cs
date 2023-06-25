@@ -68,5 +68,20 @@ namespace Movye.Api.Controllers
 
             return Ok(movie);
         }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<SearchMovieByQueryResponse>> SearchMovies(
+            [FromQuery] string query
+        )
+        {
+            var response = await _movieDBService.GetMovieByKeyword(query);
+
+            if (response is null)
+                return NotFound();
+
+            var movies = SearchMovieByQueryResponse.FromModel(response);
+
+            return Ok(movies);
+        }
     }
 }

@@ -77,5 +77,21 @@ namespace Movye.Application.Services
 
             return null;
         }
+
+        public async Task<GetMoviesByKeywordResponse?> GetMovieByKeyword(string keyword)
+        {
+            var client = new HttpClient();
+            var response = await client.GetAsync(
+                $"{env.THEMOVIEDB_API_URL}/search/movie?api_key={env.THEMOVIEDB_API_KEY}&language=pt-BR&query={keyword}"
+            );
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                return GetMoviesByKeywordResponse.FromJson(content);
+            }
+
+            return null;
+        }
     }
 }
